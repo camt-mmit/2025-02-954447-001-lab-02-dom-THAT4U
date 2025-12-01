@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="./css/dom.css" />
+
+    <script
+      type="application/javascript"
+      src="./js/dom-04-removable.js"
+    ></script>
+
+    <title>DOM-04: Removable</title>
+  </head>
+  <body>
+    <button type="button" class="app-cmd-add-number-input">Add</button>
+    <div class="app-cmp-number-list">
+      <template class="app-tmp-number-component">
+        <div class="app-cmp-number">
+          <label>
+            <b>Number <span class="app-title-number"></span>:</b>
+            <input type="number" class="app-inp-number" value="0" />
+          </label>
+          <button type="button" class="app-cmd-remove-number-input">X</button>
+        </div>
+      </template>
+    </div>
+    <label>
+      <b>Result:</b>
+      <output class="app-out-number">0</output>
+    </label>
+  </body>
+</html>
