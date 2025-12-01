@@ -1,0 +1,108 @@
+/* Basic Styling for Appearance */
+body {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  background-color: #f4f4f4;
+}
+.container {
+  max-width: 800px;
+  margin: auto;
+}
+.section-container {
+  background-color: #fff;
+  padding: 15px;
+  border: 1px solid #ddd;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 10px;
+}
+.section-header h2 {
+  margin: 0;
+  font-size: 1.5em;
+}
+.input-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.input-row label {
+  width: 80px;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+.input-row input[type='number'] {
+  flex-grow: 1;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  margin-right: 10px;
+  text-align: right; /* Align number input to the right */
+}
+.result-row {
+  display: flex;
+  align-items: center;
+  margin-top: 15px;
+  padding-top: 10px;
+  border-top: 1px dashed #ccc;
+}
+.result-row label {
+  width: 80px;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+.result-value {
+  font-weight: bold;
+  margin-left: auto; /* Push to the far right */
+}
+
+/* Button Styling */
+button {
+  padding: 5px 10px;
+  cursor: pointer;
+  border: none;
+  border-radius: 3px;
+  margin-left: 5px;
+  transition: background-color 0.2s;
+}
+.btn-section {
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+  padding: 8px 15px;
+  margin-bottom: 20px;
+}
+.btn-section:hover {
+  background-color: #0056b3;
+}
+.btn-input {
+  background-color: #28a745;
+  color: white;
+  font-weight: bold;
+  padding: 8px 15px;
+  margin-right: 10px;
+}
+.btn-input:hover {
+  background-color: #1e7e34;
+}
+.btn-remove {
+  background-color: #dc3545;
+  color: white;
+  font-weight: bold;
+  line-height: 1;
+  padding: 5px 8px; /* Smaller button */
+}
+.btn-remove:hover:not(:disabled) {
+  background-color: #c82333;
+}
+.btn-remove:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
