@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>DOM-06: Final Dynamic Sections</title>
+    <title>DOM-7: Assignment</title>
 
     <link
       rel="stylesheet"
@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="./css/material-symbols.css" />
     <link rel="stylesheet" href="./css/dom.css" />
 
-    <script type="module" src="./js/dom-06-final.js"></script>
+    <script type="module" src="./dom-07-assignment.js"></script>
   </head>
   <body>
     <div style="text-align: center; margin: 20px 0">
@@ -34,14 +34,16 @@
 
     <template id="tmp-section">
       <article
-        class="section-container"
+        class="app-cmp-section section-container"
         style="
           border: 1px solid #ccc;
-          margin: 20px;
+          margin: 20px auto; /* เพิ่ม auto เพื่อให้อยู่กึ่งกลาง */
           padding: 20px;
           border-radius: 8px;
+          background-color: white; /* เพิ่มพื้นหลังเผื่อไว้ */
         "
       >
+        >
         <header
           class="section-header"
           style="
