@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dynamic Sections - Final</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
+
+    <style>
+      /* สไตล์ตกแต่ง (CSS) */
+      body {
+        font-family: sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f9f9f9;
+      }
+
+      .material-symbols-outlined {
+        vertical-align: middle;
+        font-size: 20px;
+      }
+
+      button {
+        cursor: pointer;
+        border: none;
+        border-radius: 4px;
+        padding: 8px 12px;
+        font-weight: bold;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+      }
+      button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .btn-blue {
+        background-color: #e3f2fd;
+        color: #1976d2;
+      }
+      .btn-red {
+        background-color: #ffebee;
+        color: #d32f2f;
+      }
+
+      .section-container {
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 15px;
+        margin-bottom: 15px;
+      }
+      .input-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+      .input-row label {
+        flex-grow: 1;
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+      }
+      .input-row input {
+        text-align: right;
+        padding: 5px;
+        width: 100px;
+      }
+
+      .result-box {
+        text-align: right;
+        margin-top: 20px;
+        font-size: 1.2em;
+        font-weight: bold;
+      }
+      .result-value {
+        text-decoration: underline double;
+      }
+    </style>
+  </head>
+  <body>
+    <div style="text-align: center; margin-bottom: 30px">
+      <button
+        class="btn-blue"
+        id="btn-add-main-section"
+        style="padding: 12px 24px; font-size: 16px"
+      >
+        <span class="material-symbols-outlined">add_circle</span> Add New
+        Section
+      </button>
+    </div>
+
+    <div id="app-sections-container"></div>
+
+    <template id="tmp-section">
+      <div class="section-container">
+        <div class="section-header">
+          <button class="btn-blue btn-add-input">
+            <span class="material-symbols-outlined">add</span> Input
+          </button>
+          <h2>Section <span class="section-num">1</span></h2>
+          <button class="btn-red btn-del-section">
+            <span class="material-symbols-outlined">delete</span> Section
+          </button>
+        </div>
+        <div class="inputs-list"></div>
+        <div class="result-box">
+          Result :: <span class="result-value">0</span>
+        </div>
+      </div>
+    </template>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const container = document.getElementById('app-sections-container');
+        const template = document.getElementById('tmp-section');
+        const addMainBtn = document.getElementById('btn-add-main-section');
+
+        // ฟังก์ชันสร้าง Section ใหม่
+        function createSection() {
+          const clone = template.content.cloneNode(true);
+          const sectionEl = clone.querySelector('.section-container');
+          const inputList = sectionEl.querySelector('.inputs-list');
+          const resultDisplay = sectionEl.querySelector('.result-value');
+
+          // ฟังก์ชันอัปเดตผลรวมภายใน Section
+          const updateSum = () => {
+            const inputs = [...inputList.querySelectorAll('input')];
+            const sum = inputs.reduce(
+              (acc, input) => acc + (Number(input.value) || 0),
+              0,
+            );
+            resultDisplay.textContent = sum.toLocaleString();
+          };
+
+          // ฟังก์ชันจัดลำดับ Input (Number 1, 2, 3...)
+          const reorderInputs = () => {
+            const rows = [...inputList.querySelectorAll('.input-row')];
+            rows.forEach((row, idx) => {
+              row.querySelector('.input-num').textContent = idx + 1;
+              row.querySelector('.btn-del-input').disabled = rows.length === 1; // ห้ามลบถ้าเหลืออันเดียว
+            });
+            updateSum();
+          };
+
+          // ฟังก์ชันเพิ่ม Input
+          const addInput = () => {
+            const row = document.createElement('div');
+            row.className = 'input-row';
+            row.innerHTML = `
+                        <label>Number <span class="input-num"></span> :: <input type="number" value="0"></label>
+                        <button class="btn-red btn-del-input"><span class="material-symbols-outlined">delete_forever</span></button>
+                    `;
+
+            // ปุ่มลบ Input
+            row
+              .querySelector('.btn-del-input')
+              .addEventListener('click', () => {
+                row.remove();
+                reorderInputs();
+              });
+
+            // เมื่อกรอกตัวเลข
+            row.querySelector('input').addEventListener('input', updateSum);
+
+            inputList.appendChild(row);
+            reorderInputs();
+          };
+
+          // ผูกปุ่มกดใน Section
+          sectionEl
+            .querySelector('.btn-add-input')
+            .addEventListener('click', addInput);
+          sectionEl
+            .querySelector('.btn-del-section')
+            .addEventListener('click', () => {
+              sectionEl.remove();
+              reorderSections();
+            });
+
+          // สร้าง Input เริ่มต้น 1 อัน
+          addInput();
+
+          container.appendChild(sectionEl);
+          reorderSections();
+        }
+
+        // ฟังก์ชันจัดลำดับ Section (Section 1, 2, 3...)
+        function reorderSections() {
+          const sections = [
+            ...container.querySelectorAll('.section-container'),
+          ];
+          sections.forEach((sec, idx) => {
+            sec.querySelector('.section-num').textContent = idx + 1;
+            sec.querySelector('.btn-del-section').disabled =
+              sections.length === 1; // ห้ามลบถ้าเหลือ Section เดียว
+          });
+        }
+
+        // เริ่มต้นทำงาน
+        addMainBtn.addEventListener('click', createSection);
+        createSection(); // สร้าง Section แรกทันทีที่เปิดเว็บ
+      });
+    </script>
+  </body>
+</html>
