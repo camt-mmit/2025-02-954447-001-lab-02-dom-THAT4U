@@ -9,119 +9,104 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
     />
+
     <style>
-      /* CSS จากไฟล์ material-symbols.css */
+      /* --- ส่วน CSS (รวมจากไฟล์ dom.css) --- */
+      :root {
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+        --app-monospace-font: ui-monospace, monospace;
+      }
+      body {
+        padding: 0;
+        margin: 0;
+      }
+
       .material-symbols-outlined {
         font-variation-settings:
           'FILL' 0,
           'wght' 400,
           'GRAD' 0,
           'opsz' 24;
+        vertical-align: middle;
       }
 
-      /* CSS จากไฟล์ dom.css */
-      :root {
-        font-family:
-          system-ui,
-          -apple-system,
-          BlinkMacSystemFont,
-          'Segoe UI',
-          Roboto,
-          Oxygen,
-          Ubuntu,
-          Cantarell,
-          'Open Sans',
-          'Helvetica Neue',
-          sans-serif;
-        --app-monospace-font: ui-monospace, monospace;
-      }
-      body {
-        padding: 0px;
-        margin: 0px;
-      }
       .app-cl-primary {
         --app-color: blue;
       }
       .app-cl-warn {
         --app-color: red;
       }
-      .app-cl-column-container {
-        display: flex;
-        flex-direction: column;
-        row-gap: 4px;
-      }
-      input[type='number'],
-      .app-cl-number {
-        font-family: var(--app-monospace-font);
-        text-align: right;
-      }
+
       .app-cl-btn {
         display: inline-flex;
-        flex-direction: row;
         align-items: center;
+        gap: 5px;
         padding: 0.5em 1ch;
         font-weight: bold;
         color: var(--app-color, inherit);
-      }
-      .app-cl-btn > * {
-        pointer-events: none;
-      }
-      .app-cl-btn.app-cl-icon {
-        padding: 0px;
+        border: 1px solid transparent; /* เพิ่ม border ให้ดูเหมือนปุ่ม */
+        border-radius: 4px;
+        cursor: pointer;
       }
       .app-cl-btn:disabled {
         opacity: 0.25;
+        cursor: not-allowed;
       }
-      .app-cmp-number {
+
+      .app-cmp-section {
+        width: min(500px, 90%); /* ปรับความกว้างให้ดูดีขึ้น */
+        margin: 20px auto;
+        border: 1px solid #ccc;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .section-header {
         display: flex;
-        flex-direction: row;
-        align-items: stretch;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 10px;
       }
-      .app-cmp-number > label {
-        flex: 1 0 auto;
-        display: inline-flex;
-        flex-direction: row;
-        align-items: baseline;
+
+      .input-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
       }
-      .app-cmp-number > label > b {
-        display: inherit;
-        flex-direction: inherit;
-        align-items: inherit;
-        margin-right: 1ch;
-        width: 10ch;
+
+      .input-row label {
+        flex-grow: 1;
+        display: flex;
+        justify-content: space-between;
       }
-      .app-cmp-number > label > b > .app-title-number {
-        margin-left: auto;
+
+      .app-inp-number {
         font-family: var(--app-monospace-font);
+        text-align: right;
+        padding: 5px;
       }
-      .app-cmp-number > label > :is(input, output) {
-        flex: 1 0 auto;
-        box-sizing: border-box;
-        height: 100%;
+
+      .result-container {
+        margin-top: 20px;
+        text-align: right;
+        font-size: 1.2em;
       }
-      .app-cmp-number > label > output {
+
+      .app-out-number {
         font-weight: bold;
         text-decoration: underline double;
-      }
-      .app-cmp-section {
-        display: flex;
-        flex-direction: column;
-        width: min(320px, 100%);
-        margin-left: auto;
-        margin-right: auto;
-      }
-      .app-cmp-section > header {
-        margin-bottom: 8px;
-      }
-      .app-cmp-section .app-cmp-number-list {
-        display: flex;
-        flex-direction: column;
-        row-gap: 4px;
       }
     </style>
   </head>
   <body>
-    <div style="text-align: center; margin: 20px 0">
+    <div style="text-align: center; margin: 30px 0">
       <button
         class="app-cmd-add-section"
         style="
@@ -129,224 +114,187 @@
           color: blue;
           padding: 10px 20px;
           font-size: 16px;
+          border: 1px solid blue;
+          border-radius: 4px;
           cursor: pointer;
         "
       >
-        📝 Add New Section
+        <span class="material-symbols-outlined">edit_document</span> Add New
+        Section
       </button>
     </div>
 
     <div id="app-sections-container"></div>
 
     <template id="tmp-section">
-      <article
-        class="app-cmp-section section-container"
-        style="
-          border: 1px solid #ccc;
-          margin: 20px auto;
-          padding: 20px;
-          border-radius: 8px;
-          background-color: white;
-        "
-      >
-        <header
-          class="section-header"
-          style="
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 10px;
-          "
-        >
+      <article class="app-cmp-section section-container">
+        <header class="section-header">
           <button
             type="button"
             class="app-cl-btn app-cl-primary app-cmd-add-number-input"
             style="background-color: #d0d0ff; color: blue"
           >
-            <i class="material-symbols-outlined">add</i> Input
+            <span class="material-symbols-outlined">add</span> Input
           </button>
+
           <h2 style="margin: 0">
             Section <span class="app-title-section-number">1</span>
           </h2>
+
           <button
-            class="app-cmd-remove-section"
-            style="background-color: #ffcccc; color: red; cursor: pointer"
+            class="app-cl-btn app-cl-warn app-cmd-remove-section"
+            style="background-color: #ffcccc; color: red"
           >
-            <i class="material-symbols-outlined">delete</i> Section
+            <span class="material-symbols-outlined">delete</span> Section
           </button>
         </header>
 
         <div class="app-cl-column-container">
-          <section class="app-cmp-number-list">
-            <template class="app-tmp-number-component">
-              <div
-                class="app-cmp-number"
-                style="
-                  display: flex;
-                  align-items: center;
-                  gap: 10px;
-                  margin-bottom: 10px;
-                "
-              >
-                <label style="flex-grow: 1">
-                  <b>Number <span class="app-title-number"></span> :: </b>
-                  <input
-                    type="number"
-                    class="app-inp-number"
-                    value="0"
-                    style="padding: 5px"
-                  />
-                </label>
-                <button
-                  type="button"
-                  class="app-cl-btn app-cl-warn app-cl-icon app-cmd-remove-number-input"
-                  style="background-color: #ffcccc; color: red"
-                >
-                  <i class="material-symbols-outlined">delete_forever</i>
-                </button>
-              </div>
-            </template>
-          </section>
-          <section
-            style="margin-top: 20px; text-align: right; font-size: 1.2em"
-          >
-            <div class="app-cmp-number">
-              <label>
-                <b>Result :: </b>
-                <output
-                  class="app-cl-number app-out-number"
-                  style="font-weight: bold; text-decoration: underline"
-                  >0</output
-                >
-              </label>
-            </div>
+          <section class="app-cmp-number-list"></section>
+
+          <section class="result-container">
+            <label>
+              <b>Result :: </b>
+              <output class="app-cl-number app-out-number">0</output>
+            </label>
           </section>
         </div>
       </article>
     </template>
 
+    <template id="tmp-input">
+      <div class="app-cmp-number input-row">
+        <label>
+          <b>Number <span class="app-title-number"></span> :: </b>
+          <input type="number" class="app-inp-number" value="0" />
+        </label>
+        <button
+          type="button"
+          class="app-cl-btn app-cl-warn app-cl-icon app-cmd-remove-number-input"
+          style="background-color: #ffcccc; color: red"
+        >
+          <span class="material-symbols-outlined">delete_forever</span>
+        </button>
+      </div>
+    </template>
+
     <script>
-      // 1. ฟังก์ชัน createComponent (Logic เดิมของคุณ)
-      function createComponent(componentElem) {
-        const templateElem = componentElem.querySelector(
-          '.app-tmp-number-component',
-        );
-        if (!templateElem)
-          throw new Error('Template .app-tmp-number-component is not found');
-
-        const inputListContainer = templateElem.parentElement;
-        if (!inputListContainer)
-          throw new Error(
-            'Template .app-tmp-number-component does not have parent',
-          );
-
-        const regenerateTitleNumbersAndStatus = () => {
-          [...inputListContainer.querySelectorAll('.app-cmp-number')].forEach(
-            (inputContainer, index, items) => {
-              [...inputContainer.querySelectorAll('.app-title-number')].forEach(
-                (elem) => (elem.textContent = `${index + 1}`),
-              );
-              [
-                ...inputContainer.querySelectorAll(
-                  '.app-cmd-remove-number-input',
-                ),
-              ].forEach((elem) => (elem.disabled = items.length === 1));
-            },
-          );
-        };
-
-        const recalculateResult = () => {
-          const result = [
-            ...inputListContainer.querySelectorAll('.app-inp-number'),
-          ].reduce(
-            (result, elem) =>
-              result +
-              (Number.isNaN(elem.valueAsNumber) ? 0 : elem.valueAsNumber),
-            0,
-          );
-          [...componentElem.querySelectorAll('.app-out-number')].forEach(
-            (elem) => (elem.textContent = result.toLocaleString()),
-          );
-        };
-
-        const createInputComponent = () => {
-          const inputContainer =
-            templateElem.content.cloneNode(true).firstElementChild;
-          inputContainer.addEventListener('click', (ev) => {
-            if (ev.target.closest('.app-cmd-remove-number-input')) {
-              inputContainer.remove();
-              regenerateTitleNumbersAndStatus();
-              recalculateResult();
-            }
-          });
-          inputContainer.addEventListener('input', recalculateResult);
-          inputListContainer.append(inputContainer);
-          regenerateTitleNumbersAndStatus();
-          recalculateResult();
-        };
-
-        inputListContainer.addEventListener('change', (ev) => {
-          if (ev.target?.matches('.app-inp-number')) recalculateResult();
-        });
-
-        componentElem.addEventListener('click', (ev) => {
-          if (ev.target.closest('.app-cmd-add-number-input'))
-            createInputComponent();
-        });
-
-        createInputComponent();
-        return componentElem;
-      }
-
-      // 2. ฟังก์ชัน initApp (Logic จัดการ Section)
-      function initApp() {
+      document.addEventListener('DOMContentLoaded', () => {
         const sectionsContainer = document.getElementById(
           'app-sections-container',
         );
         const sectionTemplate = document.getElementById('tmp-section');
+        const inputTemplate = document.getElementById('tmp-input'); // แยก Template Input ออกมาชัดเจน
         const addSectionBtn = document.querySelector('.app-cmd-add-section');
 
-        const updateSectionInfo = () => {
+        // --- 1. Logic จัดการภายใน Section (Input & Calculate) ---
+        function initSectionLogic(sectionElem) {
+          const inputListContainer = sectionElem.querySelector(
+            '.app-cmp-number-list',
+          );
+          const resultOutput = sectionElem.querySelector('.app-out-number');
+
+          // ฟังก์ชันเรียงเลข Number 1, 2, 3...
+          const updateInputNumbers = () => {
+            const inputs = [
+              ...inputListContainer.querySelectorAll('.app-cmp-number'),
+            ];
+            inputs.forEach((row, index) => {
+              row.querySelector('.app-title-number').textContent = index + 1;
+
+              // ถ้าเหลือ Input เดียว ห้ามลบ
+              const delBtn = row.querySelector('.app-cmd-remove-number-input');
+              delBtn.disabled = inputs.length === 1;
+            });
+          };
+
+          // ฟังก์ชันคำนวณผลรวม
+          const calculateResult = () => {
+            const inputs = [
+              ...inputListContainer.querySelectorAll('.app-inp-number'),
+            ];
+            const sum = inputs.reduce((total, input) => {
+              return total + (parseFloat(input.value) || 0);
+            }, 0);
+            resultOutput.textContent = sum.toLocaleString();
+          };
+
+          // ฟังก์ชันสร้าง Input ใหม่
+          const addInput = () => {
+            const newInput =
+              inputTemplate.content.cloneNode(true).firstElementChild;
+
+            // Event ลบ Input
+            newInput
+              .querySelector('.app-cmd-remove-number-input')
+              .addEventListener('click', (e) => {
+                newInput.remove();
+                updateInputNumbers();
+                calculateResult();
+              });
+
+            // Event พิมพ์เลขแล้วคำนวณทันที
+            newInput
+              .querySelector('.app-inp-number')
+              .addEventListener('input', calculateResult);
+
+            inputListContainer.append(newInput);
+            updateInputNumbers();
+            calculateResult();
+          };
+
+          // ผูกปุ่ม Add Input
+          sectionElem
+            .querySelector('.app-cmd-add-number-input')
+            .addEventListener('click', addInput);
+
+          // สร้าง Input แรกเสมอ
+          addInput();
+        }
+
+        // --- 2. Logic จัดการ Section (Add/Remove Section) ---
+
+        // ฟังก์ชันเรียงเลข Section 1, 2, 3...
+        const updateSectionNumbers = () => {
           const sections = [
             ...sectionsContainer.querySelectorAll('.section-container'),
           ];
-          sections.forEach((section, index) => {
-            const titleElem = section.querySelector(
-              '.app-title-section-number',
-            );
-            if (titleElem) titleElem.textContent = index + 1;
+          sections.forEach((sec, index) => {
+            sec.querySelector('.app-title-section-number').textContent =
+              index + 1;
 
-            const removeBtn = section.querySelector('.app-cmd-remove-section');
-            if (removeBtn) removeBtn.disabled = sections.length === 1;
+            // ถ้าเหลือ Section เดียว ห้ามลบ
+            const delBtn = sec.querySelector('.app-cmd-remove-section');
+            delBtn.disabled = sections.length === 1;
           });
         };
 
+        // ฟังก์ชันสร้าง Section ใหม่
         const createSection = () => {
           const newSection =
             sectionTemplate.content.cloneNode(true).firstElementChild;
-          createComponent(newSection);
 
-          const removeBtn = newSection.querySelector('.app-cmd-remove-section');
-          removeBtn.addEventListener('click', () => {
-            newSection.remove();
-            updateSectionInfo();
-          });
+          // เรียกใช้ Logic ภายใน Section
+          initSectionLogic(newSection);
+
+          // Event ลบ Section
+          newSection
+            .querySelector('.app-cmd-remove-section')
+            .addEventListener('click', () => {
+              newSection.remove();
+              updateSectionNumbers();
+            });
 
           sectionsContainer.append(newSection);
-          updateSectionInfo();
+          updateSectionNumbers();
         };
 
-        if (addSectionBtn)
-          addSectionBtn.addEventListener('click', createSection);
+        // ผูกปุ่ม Add Section หลัก
+        addSectionBtn.addEventListener('click', createSection);
 
-        // สร้าง Section แรกทันที
+        // เริ่มต้นมา สร้าง 1 Section ทันที
         createSection();
-      }
-
-      // รันโปรแกรมเมื่อโหลดเสร็จ
-      document.addEventListener('DOMContentLoaded', initApp);
+      });
     </script>
   </body>
 </html>
