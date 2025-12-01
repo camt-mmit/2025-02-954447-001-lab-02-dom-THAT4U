@@ -54,6 +54,78 @@
                 >0</output
               >
             </label>
+            <div style="text-align: center; margin-bottom: 20px">
+              <button
+                class="app-cmd-add-section"
+                style="background-color: #d0d0ff; color: blue"
+              >
+                📝 Section
+              </button>
+            </div>
+
+            <div id="app-sections-container"></div>
+
+            <template id="tmp-section">
+              <div
+                class="section-container"
+                style="
+                  border-bottom: 1px solid #ccc;
+                  margin-bottom: 20px;
+                  padding-bottom: 20px;
+                "
+              >
+                <div
+                  class="section-header"
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    margin-bottom: 10px;
+                  "
+                >
+                  <button
+                    class="app-cmd-add-number-input"
+                    style="background-color: #d0d0ff; color: blue"
+                  >
+                    + Input
+                  </button>
+
+                  <h2 style="margin: 0">
+                    Section <span class="app-title-section-number">1</span>
+                  </h2>
+
+                  <button
+                    class="app-cmd-remove-section"
+                    style="background-color: #ffcccc; color: red"
+                  >
+                    ✖
+                  </button>
+                </div>
+
+                <div class="input-list">
+                  <template class="app-tmp-number-component">
+                    <div
+                      class="input-row"
+                      style="display: flex; gap: 10px; margin-bottom: 5px"
+                    >
+                      <label
+                        >Number <span class="app-title-number"></span> ::</label
+                      >
+                      <input type="number" class="app-inp-number" value="0" />
+                      <button
+                        class="app-cmd-remove-number-input"
+                        style="background-color: #ffcccc; color: red"
+                      >
+                        ✖
+                      </button>
+                    </div>
+                  </template>
+                </div>
+
+                <div style="margin-top: 10px; font-weight: bold">
+                  Result :: <span class="app-out-number">0</span>
+                </div>
+              </div>
+            </template>
           </div>
         </section>
       </div>
